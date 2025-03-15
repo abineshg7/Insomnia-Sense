@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insomnia Prediction System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <h2>Insomnia Predictor</h2>
+        </div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('about') }}">About</a></li>
+            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            <li><a href="{{ url_for('index') }}">Bot</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <header>
+            <h1>Insomnia Prediction System</h1>
+            <p>Your personal assistant to predict and manage insomnia symptoms!</p>
+        </header>
+
+        <form id="prediction-form">
+            <!-- Form Fields for User Inputs -->
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" name="age" step="0.1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="weight">Weight (kg):</label>
+                <input type="number" name="weight" step="0.1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="height">Height (cm):</label>
+                <input type="number" name="height" step="0.1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="sex">Sex (1=Male, 2=Female):</label>
+                <input type="number" name="sex" required>
+            </div>
+
+            <div class="form-group">
+                <label for="stress">Stress Level (1-5):</label>
+                <input type="number" name="stress" required>
+            </div>
+
+            <div class="form-group">
+                <label for="doctor">Doctor Consultation (1=Yes, 0=No):</label>
+                <input type="number" name="doctor" required>
+            </div>
+
+            <div class="form-group">
+                <label for="sport">Physical Activity (1=Yes, 0=No):</label>
+                <input type="number" name="sport" required>
+            </div>
+
+            <div class="form-group">
+                <label for="pernicious_1">Pernicious Habit 1 (0/1):</label>
+                <input type="number" name="pernicious_1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="pernicious_2">Pernicious Habit 2 (0/1):</label>
+                <input type="number" name="pernicious_2" required>
+            </div>
+
+            <div class="form-group">
+                <label for="ubp">Upper Blood Pressure (UBP):</label>
+                <input type="number" name="ubp" step="0.1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="lbp">Lower Blood Pressure (LBP):</label>
+                <input type="number" name="lbp" step="0.1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="texts">Enter Your Sleep Comments:</label>
+                <textarea id="texts" name="texts" rows="4" placeholder="e.g. I can't fall asleep at night" required></textarea>
+            </div>
+
+            <input type="submit" value="Predict" class="submit-btn">
+        </form>
+
+        <div id="prediction-results" class="prediction-container" style="display:none;">
+            <h2>Prediction Results</h2>
+            <p id="prediction-result"></p>
+            <h2>Recommended Cure</h2>
+            <p id="cure-result"></p>
+
+            <!-- Feedback Form -->
+            <h2>Provide Feedback</h2>
+            <form id="feedback-form">
+                <div class="form-group">
+                    <label for="feedback">Was the prediction helpful?</label>
+                    <select name="feedback" required>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="correct_result">Was the prediction correct?</label>
+                    <select name="correct_result" required>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+                
+                <input type="submit" value="Submit Feedback" class="submit-btn">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('prediction-form').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent default form submission
+
+            const structuredData = [[
+                Number(document.querySelector('input[name="age"]').value),
+                Number(document.querySelector('input[name="weight"]').value),
+                Number(document.querySelector('input[name="height"]').value),
+                Number(document.querySelector('input[name="sex"]').value),
+                Number(document.querySelector('input[name="stress"]').value),
+                Number(document.querySelector('input[name="doctor"]').value),
+                Number(document.querySelector('input[name="sport"]').value),
+                Number(document.querySelector('input[name="pernicious_1"]').value),
+                Number(document.querySelector('input[name="pernicious_2"]').value),
+                Number(document.querySelector('input[name="ubp"]').value),
+                Number(document.querySelector('input[name="lbp"]').value)
+            ]];
+
+            const texts = document.getElementById('texts').value.split('\n');
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ texts, structured_data: structuredData })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display prediction results and cure
+                const resultsDiv = document.getElementById('prediction-results');
+                resultsDiv.style.display = 'block';
+                document.getElementById('prediction-result').innerText = 'Prediction: ' + data.prediction;
+                document.getElementById('cure-result').innerText = 'Cure: ' + data.cure;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while making the prediction. Please try again.');
+            });
+        });
+
+        document.getElementById('feedback-form').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent default form submission
+
+            const feedback = document.querySelector('select[name="feedback"]').value;
+            const correctResult = document.querySelector('select[name="correct_result"]').value;
+
+            const feedbackData = {
+                prediction: document.getElementById('prediction-result').innerText,
+                feedback: feedback,
+                correct_result: correctResult
+            };
+
+            fetch('/feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(feedbackData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Thank you for your feedback!');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while submitting feedback. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>

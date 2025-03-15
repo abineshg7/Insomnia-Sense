@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | Insomnia Prediction System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <h2>Insomnia Predictor</h2>
+        </div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('about') }}">About</a></li>
+            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            <li><a href="{{ url_for('index') }}">Bot</a></li>
+
+        </ul>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>About Insomnia and Our System</h1>
+        </header>
+
+        <section>
+            <h2>What is Insomnia?</h2>
+            <p>Insomnia is a sleep disorder that affects millions of people worldwide, making it difficult to fall asleep, stay asleep, or wake up too early. Chronic insomnia can lead to serious health issues, including mental stress, anxiety, depression, and decreased productivity.</p>
+
+            <h2>How Our System Helps</h2>
+            <p>Using cutting-edge machine learning techniques, our Insomnia Prediction System leverages Long Short-Term Memory (LSTM) models to predict insomnia risk based on various user inputs. LSTM is a type of recurrent neural network (RNN) that is excellent at processing sequences of data—such as your health metrics and sleep patterns.</p>
+
+            <p>With this system, you can input data related to your sleep, stress levels, and daily habits. The LSTM model processes this data and provides a prediction that can help you understand your risk of insomnia. Early detection allows for timely interventions, improving your quality of life.</p>
+
+            <img src="{{ url_for('static', filename='images/effects.png') }}" alt="Insomnia Effects" class="about-img" width="600" height="350">
+        </section>
+    </div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | Insomnia Prediction System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <h2>Insomnia Predictor</h2>
+        </div>
+        <ul class="nav-links">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('index') }}">Bot</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <header>
+            <h1>Welcome to the Insomnia Prediction System</h1>
+            <p>Your companion in managing insomnia with personalized predictions.</p>
+        </header>
+
+        <section>
+            <img src="{{ url_for('static', filename='images/insom.jpeg') }}" alt="Sleep Image" class="welcome-img" width="300" height="250">
+            <p>Struggling with sleep? Our system is designed to assist you in predicting and managing insomnia symptoms using state-of-the-art technology. Start your journey toward better sleep today!</p>
+        </section>
+    </div>
+</body>
+</html>
